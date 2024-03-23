@@ -1,12 +1,13 @@
 import ReactDOM from "react-dom/client";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ContextProvider } from "./contexts/UserContext";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Registration } from "./pages/Registration";
 import { Map } from "./pages/Map";
 import "./global.css";
-
-import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCUXYG-B46rpv2iKzOlYC06qqEnelh9_uI",
@@ -19,17 +20,20 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/registration" element={<Registration />} />
-      <Route path="/map" element={<Map />} />
-    </Routes>
-  </BrowserRouter>
+  <ContextProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/registration" element={<Registration />} />
+        <Route path="/map" element={<Map />} />
+      </Routes>
+    </BrowserRouter>
+  </ContextProvider>
 );

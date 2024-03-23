@@ -1,8 +1,10 @@
-import { useFormik } from "formik";
-import React, { useEffect, useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import React from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import { IconButton, Snackbar } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { auth } from "../..";
 import {
   Additional,
   Form,
@@ -16,10 +18,28 @@ import {
   Switcher,
   Link,
 } from "./Login.styles";
-import { IconButton, Snackbar } from "@mui/material";
 
 export const Login: React.FC = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
+
+  const signIn = (email: string, password: string) => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        navigate("/map");
+      })
+      .catch((error) => {
+        setOpen(true);
+      });
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    onSubmit: () => {},
+  });
 
   const handleClose = (
     event: React.SyntheticEvent | Event,
@@ -43,22 +63,7 @@ export const Login: React.FC = () => {
       </IconButton>
     </React.Fragment>
   );
-  const auth = getAuth();
-  const navigate = useNavigate();
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    onSubmit: () => {},
-  });
 
-  const signIn = (email: string, password: string) => {
-    signInWithEmailAndPassword(auth, email, password).catch((error) => {
-      setOpen(true);
-    });
-  };
-  console.log(auth.currentUser?.email);
   return (
     <Main>
       <FormContainer>

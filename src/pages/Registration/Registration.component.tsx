@@ -1,10 +1,12 @@
-import { useFormik } from "formik";
-import { getAuth, createUserWithEmailAndPassword, User } from "firebase/auth";
 import React from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import Snackbar from "@mui/material/Snackbar";
-import { useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
+import { IconButton } from "@mui/material";
+import { auth } from "../..";
 import {
   Additional,
   Button,
@@ -18,11 +20,10 @@ import {
   TitleContainer,
   Link,
 } from "./Registration.styles";
-import { IconButton } from "@mui/material";
 
 export const Registration: React.FC = () => {
   const [open, setOpen] = React.useState(false);
-
+  const navigate = useNavigate();
   const handleClose = (
     event: React.SyntheticEvent | Event,
     reason?: string
@@ -46,8 +47,6 @@ export const Registration: React.FC = () => {
     </React.Fragment>
   );
 
-  const auth = getAuth();
-  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -71,10 +70,15 @@ export const Registration: React.FC = () => {
 
   const createUser = (email: string, password: string) => {
     if (Object.keys(formik.errors).length) return;
-    createUserWithEmailAndPassword(auth, email, password).catch((error) => {
-      setOpen(true);
-    });
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        navigate("/map");
+      })
+      .catch((error) => {
+        setOpen(true);
+      });
   };
+
   return (
     <Main>
       <FormContainer>
