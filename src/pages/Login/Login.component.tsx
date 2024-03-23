@@ -1,9 +1,50 @@
 import { useFormik } from "formik";
-import React from "react";
-
-import { Form, FormContainer, Main, TextField, Title } from "./Login.styles";
+import React, { useEffect, useState } from "react";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
+import {
+  Additional,
+  Form,
+  FormContainer,
+  Main,
+  TextField,
+  Title,
+  TitleContainer,
+  Button,
+  ButtonContainer,
+  Switcher,
+  Link,
+} from "./Login.styles";
+import { IconButton, Snackbar } from "@mui/material";
 
 export const Login: React.FC = () => {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+  const auth = getAuth();
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -11,11 +52,30 @@ export const Login: React.FC = () => {
     },
     onSubmit: () => {},
   });
-  console.log(formik.values);
+
+  const signIn = (email: string, password: string) => {
+    signInWithEmailAndPassword(auth, email, password).catch((error) => {
+      setOpen(true);
+    });
+  };
+  console.log(auth.currentUser?.email);
   return (
     <Main>
       <FormContainer>
-        <Title>LOGIN</Title>
+        <TitleContainer>
+          <Title>Sign In</Title>
+          <Additional>
+            Enter your email below to login to your account
+          </Additional>
+        </TitleContainer>
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          open={open}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          message="Email or password are incorrect"
+          action={action}
+        />
         <Form>
           <TextField
             size="small"
@@ -40,6 +100,18 @@ export const Login: React.FC = () => {
             onBlur={formik.handleBlur}
           />
         </Form>
+        <ButtonContainer>
+          <Button
+            variant="contained"
+            onClick={() => signIn(formik.values.email, formik.values.password)}
+          >
+            Login
+          </Button>
+        </ButtonContainer>
+        <Switcher>
+          Don't have an account?
+          <Link onClick={() => navigate("/registration")}>Sign Up</Link>
+        </Switcher>
       </FormContainer>
     </Main>
   );

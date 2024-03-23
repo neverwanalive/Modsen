@@ -6,6 +6,20 @@ import { Registration } from "./pages/Registration";
 import { Map } from "./pages/Map";
 import "./global.css";
 
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCUXYG-B46rpv2iKzOlYC06qqEnelh9_uI",
+  authDomain: "modsen-f93e9.firebaseapp.com",
+  projectId: "modsen-f93e9",
+  storageBucket: "modsen-f93e9.appspot.com",
+  messagingSenderId: "114123321729",
+  appId: "1:114123321729:web:b62ac7f6296466985a3880",
+  measurementId: "G-8Q3121JYCD",
+};
+
+const app = initializeApp(firebaseConfig);
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );

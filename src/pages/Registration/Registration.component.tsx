@@ -1,16 +1,53 @@
 import { useFormik } from "formik";
+import { getAuth, createUserWithEmailAndPassword, User } from "firebase/auth";
 import React from "react";
 import * as Yup from "yup";
-
+import Snackbar from "@mui/material/Snackbar";
+import { useNavigate } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
 import {
+  Additional,
+  Button,
+  ButtonContainer,
   Form,
   FormContainer,
   Main,
+  Switcher,
   TextField,
   Title,
+  TitleContainer,
+  Link,
 } from "./Registration.styles";
+import { IconButton } from "@mui/material";
 
 export const Registration: React.FC = () => {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
+  const auth = getAuth();
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -18,11 +55,6 @@ export const Registration: React.FC = () => {
       repeatPassword: "",
     },
     validationSchema: Yup.object().shape({
-      username: Yup.string()
-        .min(3, "Too Short!")
-        .max(21, "Too Long!")
-        .required("First name field is required")
-        .nullable(),
       password: Yup.string()
         .min(7, "Too Short!")
         .max(21, "Too Long!")
@@ -37,12 +69,29 @@ export const Registration: React.FC = () => {
     onSubmit: () => {},
   });
 
-  console.log(formik.values);
-
+  const createUser = (email: string, password: string) => {
+    if (Object.keys(formik.errors).length) return;
+    createUserWithEmailAndPassword(auth, email, password).catch((error) => {
+      setOpen(true);
+    });
+  };
   return (
     <Main>
       <FormContainer>
-        <Title>Sign Up</Title>
+        <TitleContainer>
+          <Title>Sign Up</Title>
+          <Additional>
+            Enter your email and password below to create an account
+          </Additional>
+        </TitleContainer>
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          open={open}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          message="This email already exist"
+          action={action}
+        />
         <Form>
           <TextField
             error={!!formik.errors.email && !!formik.touched.email}
@@ -92,6 +141,20 @@ export const Registration: React.FC = () => {
             onBlur={formik.handleBlur}
           />
         </Form>
+        <ButtonContainer>
+          <Button
+            variant="contained"
+            onClick={() =>
+              createUser(formik.values.email, formik.values.password)
+            }
+          >
+            Sign Up
+          </Button>
+        </ButtonContainer>
+        <Switcher>
+          Already have an account?
+          <Link onClick={() => navigate("/login")}>Sign In</Link>
+        </Switcher>
       </FormContainer>
     </Main>
   );
