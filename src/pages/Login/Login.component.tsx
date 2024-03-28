@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -50,6 +50,20 @@ export const Login: React.FC = () => {
     }
     setOpen(false);
   };
+
+  useEffect(() => {
+    const event = (e: KeyboardEvent): void => {
+      if (e.key === "Enter") {
+        signIn(formik.values.email, formik.values.password);
+      }
+    };
+
+    window.addEventListener("keypress", event);
+
+    return () => {
+      window.removeEventListener("keypress", event);
+    };
+  });
 
   const action = (
     <React.Fragment>

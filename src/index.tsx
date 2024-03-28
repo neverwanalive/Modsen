@@ -1,5 +1,6 @@
 import ReactDOM from "react-dom/client";
 import { initializeApp } from "firebase/app";
+import { getDatabase } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ContextProvider } from "./contexts/UserContext";
@@ -12,6 +13,8 @@ import "./global.css";
 const firebaseConfig = {
   apiKey: "AIzaSyCUXYG-B46rpv2iKzOlYC06qqEnelh9_uI",
   authDomain: "modsen-f93e9.firebaseapp.com",
+  databaseURL:
+    "https://modsen-f93e9-default-rtdb.europe-west1.firebasedatabase.app/",
   projectId: "modsen-f93e9",
   storageBucket: "modsen-f93e9.appspot.com",
   messagingSenderId: "114123321729",
@@ -20,6 +23,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+export const database = getDatabase(app);
 export const auth = getAuth(app);
 
 const root = ReactDOM.createRoot(

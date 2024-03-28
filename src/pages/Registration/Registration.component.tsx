@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -78,6 +78,20 @@ export const Registration: React.FC = () => {
         setOpen(true);
       });
   };
+
+  useEffect(() => {
+    const event = (e: KeyboardEvent): void => {
+      if (e.key === "Enter") {
+        createUser(formik.values.email, formik.values.password);
+      }
+    };
+
+    window.addEventListener("keypress", event);
+
+    return () => {
+      window.removeEventListener("keypress", event);
+    };
+  });
 
   return (
     <Main>

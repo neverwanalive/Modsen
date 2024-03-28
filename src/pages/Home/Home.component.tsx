@@ -17,8 +17,8 @@ export const Home: React.FC = () => {
 
   return (
     <>
-      {!authState.pending && (
-        <Main>
+      <Main>
+        {!authState.pending && (
           <Header>
             <Button variant="contained" onClick={() => navigate("/map")}>
               Get Started
@@ -35,10 +35,10 @@ export const Home: React.FC = () => {
               </>
             )}
           </Header>
+        )}
 
-          <Container></Container>
-        </Main>
-      )}
+        <Container></Container>
+      </Main>
     </>
   );
 };
