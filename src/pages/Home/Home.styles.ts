@@ -11,7 +11,7 @@ export const Header = styled.div`
   width: 100vw;
   background-color: white;
   height: 5%;
-
+  position: absolute;
   @keyframes myAnim {
     0% {
       opacity: 0;
@@ -43,7 +43,7 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 95%;
+  height: 100%;
 `;
 
 export const Title = styled.div`
