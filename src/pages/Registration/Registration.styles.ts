@@ -60,6 +60,10 @@ export const FormContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 22%;
+  @media (max-width: 1279px) {
+    width: 100%;
+    padding: 20px;
+  }
 `;
 
 export const Form = styled.form`

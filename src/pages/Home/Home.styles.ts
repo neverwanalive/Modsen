@@ -12,6 +12,7 @@ export const Header = styled.div`
   background-color: white;
   height: 5%;
   position: absolute;
+
   @keyframes myAnim {
     0% {
       opacity: 0;
@@ -49,10 +50,12 @@ export const Container = styled.div`
 export const Title = styled.div`
   font-size: 50px;
   font-weight: 900;
+  padding: 10px;
 `;
 
 export const SubTitle = styled.div`
   color: grey;
   font-weight: 500;
   font-size: 30px;
+  padding: 10px;
 `;

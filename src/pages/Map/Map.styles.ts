@@ -17,14 +17,16 @@ export const Container = styled.div`
   display: flex;
   flex-direction: row;
   height: 100%;
+  @media (max-width: 1279px) {
+    flex-direction: column;
+  }
 `;
 
 export const SideBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 20%;
-  padding: 20px;
+  padding: 10px;
 `;
 
 export const PopupTitle = styled.div`

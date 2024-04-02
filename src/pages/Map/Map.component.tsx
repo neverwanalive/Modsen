@@ -4,7 +4,6 @@ import {
   Marker,
   Popup,
   useMapEvents,
-  ZoomControl,
   Circle,
   Polyline,
 } from "react-leaflet";
@@ -22,24 +21,18 @@ import {
   ButtonContainer,
 } from "./Map.styles";
 import { LatLngTuple } from "leaflet";
-import { Header } from "../Home/Home.styles";
+
 import { useNavigate } from "react-router-dom";
 import { Context } from "../../contexts/UserContext";
 import { signOut } from "firebase/auth";
 import { auth } from "../..";
-import {
-  Drawer,
-  TextField,
-  Toolbar,
-  IconButton,
-  Snackbar,
-} from "@mui/material";
-import { Unstable_NumberInput as NumberInput } from "@mui/base/Unstable_NumberInput";
+import { TextField, IconButton, Snackbar } from "@mui/material";
+
 import { categories } from "../../constants/categories";
 import { blackIcon, redIcon } from "../../constants/marker";
-import { DataSnapshot, onValue, ref, remove, set } from "firebase/database";
+import { onValue, ref, remove, set } from "firebase/database";
 import { database } from "../..";
-import { createFileLevelUniqueName } from "typescript";
+
 import CloseIcon from "@mui/icons-material/Close";
 
 export const Map: React.FC = () => {
@@ -195,7 +188,7 @@ export const Map: React.FC = () => {
             ))}
           </PopupCategories>
           <PopupButtonContainer>
-            <Button onClick={(e) => saveData(e, v)}>save</Button>
+            <Button onClick={(e) => deleteData(e, v)}>Delete</Button>
             <Button disabled={!clickPos} onClick={(e) => routing(e, v)}>
               show route
             </Button>
@@ -204,8 +197,6 @@ export const Map: React.FC = () => {
       </Marker>
     ));
   };
-
-  console.log(fav);
 
   const routing = (e: any, place: any) => {
     const url =
@@ -279,7 +270,7 @@ export const Map: React.FC = () => {
         {position && (
           <Main
             center={position}
-            zoom={16}
+            zoom={14}
             scrollWheelZoom={true}
             doubleClickZoom={false}
             closePopupOnClick={true}
@@ -311,6 +302,7 @@ export const Map: React.FC = () => {
             options={categories}
             isMulti
             onChange={(v) => setCategory(v.map((o) => o.value).join(","))}
+            isOptionDisabled={() => category.split(",").length >= 3}
           />
           <Button
             disabled={!category || !clickPos}
