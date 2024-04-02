@@ -1,13 +1,16 @@
 import styled from "styled-components";
 import { Button as ButtonMui } from "@mui/material";
 
-export const Main = styled.div``;
+export const Main = styled.div`
+  height: 100vh;
+`;
 
 export const Header = styled.div`
   display: flex;
   justify-content: end;
   width: 100vw;
   background-color: white;
+  height: 5%;
 
   @keyframes myAnim {
     0% {
@@ -35,4 +38,21 @@ export const Button = styled(ButtonMui)`
   }
 `;
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 95%;
+`;
+
+export const Title = styled.div`
+  font-size: 50px;
+  font-weight: 900;
+`;
+
+export const SubTitle = styled.div`
+  color: grey;
+  font-weight: 500;
+  font-size: 30px;
+`;

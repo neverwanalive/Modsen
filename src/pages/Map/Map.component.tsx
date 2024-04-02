@@ -9,7 +9,18 @@ import {
   Polyline,
 } from "react-leaflet";
 import Select from "react-select";
-import { Main, MainContainer, SideBox, Container } from "./Map.styles";
+import {
+  Main,
+  MainContainer,
+  SideBox,
+  Container,
+  PopupButtonContainer,
+  PopupTitle,
+  PopupCategories,
+  Button,
+  Title,
+  ButtonContainer,
+} from "./Map.styles";
 import { LatLngTuple } from "leaflet";
 import { Header } from "../Home/Home.styles";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +31,6 @@ import {
   Drawer,
   TextField,
   Toolbar,
-  Button,
   IconButton,
   Snackbar,
 } from "@mui/material";
@@ -150,11 +160,20 @@ export const Map: React.FC = () => {
               position={[v.properties.lat, v.properties.lon]}
             >
               <Popup>
-                <>
-                  {v.properties.formatted}
-                  {v.properties.categories}
+                <PopupTitle>{v.properties.formatted}</PopupTitle>
+                <PopupCategories>
+                  {v.properties.categories.map((v: any) => (
+                    <ul>
+                      <li>{v}</li>
+                    </ul>
+                  ))}
+                </PopupCategories>
+                <PopupButtonContainer>
                   <Button onClick={(e) => saveData(e, v)}>save</Button>
-                </>
+                  <Button disabled={!clickPos} onClick={(e) => routing(e, v)}>
+                    show route
+                  </Button>
+                </PopupButtonContainer>
               </Popup>
             </Marker>
           ))}
@@ -167,14 +186,26 @@ export const Map: React.FC = () => {
     return fav.map((v: any) => (
       <Marker position={[v.properties.lat, v.properties.lon]}>
         <Popup>
-          {v.properties.formatted}
-          {v.properties.categories}
-          <Button onClick={(e) => deleteData(e, v)}>delete</Button>
-          <Button onClick={(e) => routing(e, v)}>show route</Button>
+          <PopupTitle>{v.properties.formatted}</PopupTitle>
+          <PopupCategories>
+            {v.properties.categories.map((v: any) => (
+              <ul>
+                <li>{v}</li>
+              </ul>
+            ))}
+          </PopupCategories>
+          <PopupButtonContainer>
+            <Button onClick={(e) => saveData(e, v)}>save</Button>
+            <Button disabled={!clickPos} onClick={(e) => routing(e, v)}>
+              show route
+            </Button>
+          </PopupButtonContainer>
         </Popup>
       </Marker>
     ));
   };
+
+  console.log(fav);
 
   const routing = (e: any, place: any) => {
     const url =
@@ -269,11 +300,13 @@ export const Map: React.FC = () => {
           </Main>
         )}
         <SideBox>
+          <Title>Choose Radius</Title>
           <TextField
             type="number"
             value={radius}
             onChange={(e) => changeRaduis(e.target.value)}
           />
+          <Title>Choose Categories</Title>
           <Select
             options={categories}
             isMulti
@@ -286,16 +319,26 @@ export const Map: React.FC = () => {
           >
             Search
           </Button>
-
-          {!authState.pending && authState.user && (
-            <Button onClick={() => signOutFn()}>Sign Out</Button>
-          )}
-          {!authState.pending && !authState.user && (
-            <>
-              <Button onClick={() => navigate("/login")}>Sign In</Button>
-              <Button onClick={() => navigate("/registration")}>Sign Up</Button>
-            </>
-          )}
+          <ButtonContainer>
+            {!authState.pending && authState.user && (
+              <Button variant="outlined" onClick={() => signOutFn()}>
+                Sign Out
+              </Button>
+            )}
+            {!authState.pending && !authState.user && (
+              <>
+                <Button variant="outlined" onClick={() => navigate("/login")}>
+                  Sign In
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate("/registration")}
+                >
+                  Sign Up
+                </Button>
+              </>
+            )}
+          </ButtonContainer>
         </SideBox>
       </Container>
     </MainContainer>
